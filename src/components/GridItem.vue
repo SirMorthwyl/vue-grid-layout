@@ -532,6 +532,7 @@ export default {
       let pos;
       switch (event.type) {
         case "resizestart": {
+          this.$emit("resize-started", this.i);
           this.previousW = this.innerW;
           this.previousH = this.innerH;
           pos = this.calcPosition(
