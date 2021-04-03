@@ -620,7 +620,8 @@ export default {
           pos.h,
           pos.w,
           newSize.height,
-          newSize.width
+          newSize.width,
+          this.innerW !== pos.w || this.innerH !== pos.h // bool changed
         );
       }
       this.eventBus.$emit(
@@ -647,6 +648,8 @@ export default {
       let newPosition = { top: 0, left: 0 };
       switch (event.type) {
         case "dragstart": {
+          this.$emit("move-started", this.i);
+
           this.previousX = this.innerX;
           this.previousY = this.innerY;
 
@@ -711,11 +714,14 @@ export default {
       if (this.innerX !== pos.x || this.innerY !== pos.y) {
         this.$emit("move", this.i, pos.x, pos.y);
       }
-      if (
-        event.type === "dragend" &&
-        (this.previousX !== this.innerX || this.previousY !== this.innerY)
-      ) {
-        this.$emit("moved", this.i, pos.x, pos.y);
+      if (event.type === "dragend") {
+        this.$emit(
+          "moved",
+          this.i,
+          pos.x,
+          pos.y,
+          this.innerX !== pos.x || this.innerY !== pos.y // bool changed
+        );
       }
       this.eventBus.$emit(
         "dragEvent",
